@@ -1,6 +1,3 @@
-from faulthandler import dump_traceback
-
-
 class InfoMessage:
     """Информационное сообщение о тренировке."""
     def __init__(self, training_type: str,
