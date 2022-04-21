@@ -139,7 +139,6 @@ class Swimming(Training):
                  count_pool: int,
                  ) -> None:
         super().__init__(action, duration, weight)
-        self.LEN_STEP = Swimming.LEN_STEP
         self.length_pool = length_pool
         self.count_pool = count_pool
 
