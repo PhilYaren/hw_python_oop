@@ -1,3 +1,6 @@
+from socketserver import DatagramRequestHandler
+
+
 class InfoMessage:
     """Информационное сообщение о тренировке."""
     def __init__(self, training_type: str,
@@ -152,12 +155,10 @@ class Swimming(Training):
 
 def read_package(workout_type: str, data: list) -> Training:
     """Прочитать данные полученные от датчиков."""
-    if workout_type == 'SWM':
-        return Swimming(data[0], data[1], data[2], data[3], data[4])
-    elif workout_type == 'RUN':
-        return Running(data[0], data[1], data[2])
-    elif workout_type == 'WLK':
-        return SportsWalking(data[0], data[1], data[2], data[3])
+    Key = {'RUN': Running,
+           'SWM': Swimming,
+           'WLK': SportsWalking}
+    return Key[workout_type](*data)
 
 
 def main(training: Training) -> None:
