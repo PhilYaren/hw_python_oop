@@ -10,7 +10,7 @@ class InfoMessage:
     speed: float
     calories: float
 
-    def get_message(self) -> str:
+    def __repr__(self) -> str:
         message = (f'Тип тренировки: {self.training_type};'
                    f' Длительность: {self.duration:.3f} ч.;'
                    f' Дистанция: {self.distance:.3f} км;'
@@ -18,15 +18,8 @@ class InfoMessage:
                    f' Потрачено ккал: {self.calories:.3f}.')
         return message
 
-    # К сожалению, по тестам не пройдет если я удалю get_message.
-    # Но __str__ Я реализовал)
-    def __str__(self) -> str:
-        message = (f'Тип тренировки: {self.training_type};'
-                   f' Длительность: {self.duration:.3f} ч.;'
-                   f' Дистанция: {self.distance:.3f} км;'
-                   f' Ср. скорость: {self.speed:.3f} км/ч;'
-                   f' Потрачено ккал: {self.calories:.3f}.')
-        return message
+    def get_message(self) -> str:
+        return str(self)
 
 
 class Training:
@@ -71,12 +64,6 @@ class Running(Training):
     """Тренировка: бег."""
     SPD_COEFF_1: int = 18
     SPD_COEFF_2: int = 20
-
-    def __init__(self, action: int,
-                 duration: float,
-                 weight: float
-                 ) -> None:
-        super().__init__(action, duration, weight)
 
     def get_distance(self) -> float:
         return super().get_distance()
@@ -151,8 +138,8 @@ class Swimming(Training):
         return mean_speed
 
     def get_spent_calories(self) -> float:
-        calories = ((self.get_mean_speed() + Swimming.SPEED_COEFF)
-                    * Swimming.WEIGHT_COEFF * self.weight)
+        calories: float = ((self.get_mean_speed() + Swimming.SPEED_COEFF)
+                           * Swimming.WEIGHT_COEFF * self.weight)
         return calories
 
     def show_training_info(self) -> InfoMessage:
@@ -161,16 +148,17 @@ class Swimming(Training):
 
 def read_package(workout_type: str, data: list) -> Training:
     """Прочитать данные полученные от датчиков."""
-    Key = {'RUN': Running,
-           'SWM': Swimming,
-           'WLK': SportsWalking}
-    return Key[workout_type](*data)
+    workout_class = {'RUN': Running,
+                     'SWM': Swimming,
+                     'WLK': SportsWalking
+                     }
+    return workout_class[workout_type](*data)
 
 
 def main(training: Training) -> None:
     """Главная функция."""
     info: InfoMessage = training.show_training_info()
-    print(str(info))
+    print(info)
 
 
 if __name__ == '__main__':
